@@ -1,4 +1,6 @@
 const path = require("path");
+const PACKAGE = require('./package.json');
+const version = PACKAGE.version;
 
 module.exports = (webpackConfigEnv, argv) => {
   return _webpackConfig({
@@ -21,7 +23,7 @@ function _webpackConfig(opts) {
       `src/${opts.orgName}-${opts.projectName}.js`
     ),
     output: {
-      filename: `${opts.orgName}-${opts.projectName}.js`,
+      filename: `${opts.orgName}-${opts.projectName}-${version}.js`,
       libraryTarget: "umd",
       path: path.resolve(process.cwd(), "dist"),
       uniqueName: opts.projectName,

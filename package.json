@@ -1,5 +1,6 @@
 {
   "name": "@entando/react-app-wc-umd",
+  "version": "0.0.1",
   "scripts": {
     "start": "webpack serve --port 8084",
     "build": "webpack --mode=production",
