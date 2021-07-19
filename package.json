@@ -2,7 +2,7 @@
   "name": "@entando/react-app-wc-umd",
   "version": "0.0.1",
   "scripts": {
-    "start": "webpack serve --port 8084",
+    "start": "webpack serve --port 8084 --open",
     "build": "webpack --mode=production",
     "analyze": "webpack --mode=production --env analyze",
     "lint": "eslint src --ext js",
