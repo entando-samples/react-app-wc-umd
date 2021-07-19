@@ -1,15 +1,28 @@
 import ReactDOM from "react-dom";
 import React from "react";
+import WCStyle from './App.style.css';
+import './index.css'
+import App from './App';
 
-import Root from "./root.component";
+const template = document.createElement('template');
+template.innerHTML=`
+<style>
+    ${WCStyle.toString()}
+</style>
+<span></span>`
 
 class Xrwc extends HTMLElement {
-  connectedCallback() {
-    const mountPoint = document.createElement("span");
-    this.attachShadow({ mode: "open" }).appendChild(mountPoint);
+  constructor() {
+    super();
+    this.attachShadow({mode: 'open'});
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+  }
 
+  connectedCallback() {
     const name = this.getAttribute("name");
-    ReactDOM.render(<Root name={name} />, mountPoint);
+    ReactDOM.render(<App name={name} />, this.shadowRoot.querySelector("span"));
+
+
   }
 }
 customElements.define("x-rwc", Xrwc);

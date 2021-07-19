@@ -1,11 +1,25 @@
 const path = require("path");
 const PACKAGE = require('./package.json');
 const version = PACKAGE.version;
+const name = PACKAGE.name;
+
+function parseName(name){
+  let slashIndex = name.indexOf("/")
+  let orgName = name.substr(1,slashIndex-1)
+  let projectName = name.substr(slashIndex+1)
+  return {
+    orgName: orgName,
+    projectName: projectName
+  }
+}
+
+
 
 module.exports = (webpackConfigEnv, argv) => {
+  const projectDetails = parseName(name)
   return _webpackConfig({
-    orgName: "entando",
-    projectName: "react-app-wc-umd",
+    orgName: projectDetails.orgName,
+    projectName: projectDetails.projectName,
     webpackConfigEnv,
     argv,
   });
@@ -19,8 +33,8 @@ function _webpackConfig(opts) {
   return {
     mode: isProduction ? "production" : "development",
     entry: path.resolve(
-      process.cwd(),
-      `src/${opts.orgName}-${opts.projectName}.js`
+        process.cwd(),
+        `src/${opts.orgName}-${opts.projectName}.js`
     ),
     output: {
       filename: `${opts.orgName}-${opts.projectName}-${version}.js`,
@@ -44,7 +58,8 @@ function _webpackConfig(opts) {
           },
         },
         {
-          test: /\.css$/i,
+          //https://forum.freecodecamp.org/t/using-external-css-in-a-web-component-with-webpack/326307/3
+          test: /(?<!\.style).css$/,
           include: [/node_modules/, /src/],
           use: [
             {
@@ -53,7 +68,19 @@ function _webpackConfig(opts) {
             {
               loader: require.resolve("css-loader", { paths: [__dirname] }),
               options: {
-                modules: false,
+                modules: false
+              },
+            },
+          ],
+        },
+        {
+          test: /\.style\.css$/,
+          include: [/node_modules/, /src/],
+          use: [
+            {
+              loader: require.resolve("css-loader", { paths: [__dirname] }),
+              options: {
+                modules: false
               },
             },
           ],
